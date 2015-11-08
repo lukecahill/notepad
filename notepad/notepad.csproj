@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Serialisation.cs" />
     <EmbeddedResource Include="Notepad.resx">
       <DependentUpon>Notepad.cs</DependentUpon>
     </EmbeddedResource>

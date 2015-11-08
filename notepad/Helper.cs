@@ -1,54 +1,54 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace notepad {
     public class Helper {
-        public bool SaveCurrentFile(string filename, string textToWrite) {
-            try {
-                File.WriteAllText(filename, textToWrite);
-                return true;
-            } catch (IOException io) {
-                Debug.WriteLine(io.Message);
-                return false;
-            }
-        }
-
+        /// <summary>
+        /// Format the window title for the form
+        /// </summary>
+        /// <param name="fileName">The file name to have as the form title</param>
+        /// <returns>String with formatted text</returns>
         public string SetWindowTitle(string fileName) {
             return $"{fileName} - Text Editor";
         }
 
-        //public DialogResult ShowSaveDialog() {
-        //    var dialog = new SaveFileDialog();
-        //    var result = dialog.ShowDialog();
-
-        //    if (result == DialogResult.OK) {
-        //        var file = dialog.FileName;
-        //        var form = new Form1();
-        //        form.OpenFile(file);
-        //    }
-
-        //    return result;
-        //}
-
+        /// <summary>
+        /// Used to get the current datetime 
+        /// </summary>
+        /// <returns>String with UTC datetime</returns>
         public string ReturnTime() {
-            return System.DateTime.UtcNow.ToString();
+            return DateTime.UtcNow.ToString();
         }
 
+        /// <summary>
+        /// Starts a new process
+        /// </summary>
         public void StartNew() {
             var info = new ProcessStartInfo(Application.ExecutablePath);
             Process.Start(info);
         }
 
+        /// <summary>
+        /// Counts the number of lines of text there are in the program
+        /// </summary>
+        /// <param name="textArea">Textbox area item</param>
+        /// <returns>Integer with the count of the number of lines found</returns>
         public int LineCount(TextBox textArea) {
             string[] lines = Regex.Split(textArea.Text.Trim(), "\r\n");
             var lineCount = lines.Count();
             return lineCount;
         }
 
+        /// <summary>
+        /// Counts the number of words of text there are in the program
+        /// </summary>
+        /// <param name="textArea">Textbox area item</param>
+        /// <returns>Integer with the count of the number of lines found</returns>
         public int WordCount(TextBox textArea) {
             string[] words = Regex.Split(textArea.Text.Trim(), "\\w+");
             var wordCounter = 0;
@@ -56,5 +56,29 @@ namespace notepad {
             return wordCounter -= 1;
         }
 
+        /// <summary>
+        /// Creates a new FontDialog item with the initilaised parameters set
+        /// </summary>
+        /// <returns>FontDialog item</returns>
+        public FontDialog SetUpFontDialog() {
+            return new FontDialog {
+                ShowColor = true,
+                ShowApply = true,
+                ShowEffects = true,
+                ShowHelp = true
+            };
+        }
+
+        /// <summary>
+        /// Checks if the note has been saved before the user exits.
+        /// </summary>
+        /// <param name="saved">Boolean of if the note has been saved</param>
+        public void CheckExit(bool saved) {
+            if (saved) {
+                Environment.Exit(0);
+            } else {
+                MessageBox.Show("Would you like to save before exiting?", "Warning");
+            }
+        }
     }
 }
