@@ -1,76 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
 namespace notepad {
     [Serializable]
-    public partial class Form1 : Form {
-        public Form1() {
+    public partial class MainWindow : Form {
+        public MainWindow() {
             InitializeComponent();
             wordWrapToolStripMenuItem.BackColor = Color.Red;
         }
 
         bool saved = false;
         private string filename;
+        Helper help = new Helper();
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
             MessageBox.Show("Written by Luke Cahill");
         }
 
+        #region Copy, Paste & Cut
         private void pasteToolStripMenuItem1_Click(object sender, EventArgs e) {
             if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) == true) {
-                textBox1.Paste();
+                textArea.Paste();
                 Clipboard.Clear();
             }
         }
 
         private void copyToolStripMenuItem1_Click(object sender, EventArgs e) {
-            if (textBox1.SelectionLength > 0) {
-                textBox1.Copy();
+            if (textArea.SelectionLength > 0) {
+                textArea.Copy();
             }
         }
 
         private void cutToolStripMenuItem1_Click(object sender, EventArgs e) {
-            if (textBox1.SelectionLength > 0) {
-                textBox1.Cut();
+            if (textArea.SelectionLength > 0) {
+                textArea.Cut();
             }
         }
+
+        #endregion
 
         public void searchToolStripMenuItem_Click(object sender, EventArgs e) {
             string search = Interaction.InputBox("What would you like to search for?", "Search", "");
             //string searchFor = Regex.Split(textBox1.Text.Trim(), search);
 
-            int pos = textBox1.Text.IndexOf(search);
+            int pos = textArea.Text.IndexOf(search);
             int length = search.Length;
             if (pos != -1) {
-                textBox1.SelectionStart = pos;
-                textBox1.SelectionLength = length;
+                textArea.SelectionStart = pos;
+                textArea.SelectionLength = length;
             } else {
-                MessageBox.Show("\'" + search + "\'" + " was not found!", "Error");
+                MessageBox.Show($"\'{search}\'" + " was not found!", "Error");
             }
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) {
-            textBox1.SelectAll();
+            textArea.SelectAll();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e) {
-            var info = new System.Diagnostics.ProcessStartInfo(Application.ExecutablePath);
-            System.Diagnostics.Process.Start(info);
+            help.StartNew();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (saved == true) {
+            if (saved) {
                 Environment.Exit(0);
             } else {
                 MessageBox.Show("Would you like to save before exiting?", "Warning");
@@ -78,12 +75,12 @@ namespace notepad {
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (textBox1.WordWrap == true) {
-                textBox1.WordWrap = false;
+            if (textArea.WordWrap) {
+                textArea.WordWrap = false;
                 wordWrapToolStripMenuItem.Name = "Word wrap on";
                 wordWrapToolStripMenuItem.BackColor = Color.Green;
-            } else if (textBox1.WordWrap == false) {
-                textBox1.WordWrap = true;
+            } else if (textArea.WordWrap == false) {
+                textArea.WordWrap = true;
                 wordWrapToolStripMenuItem.Name = "Word wrap off";
                 wordWrapToolStripMenuItem.BackColor = Color.Red;
             }
@@ -97,37 +94,29 @@ namespace notepad {
             dlg.ShowHelp = true;
 
             if (dlg.ShowDialog() == DialogResult.OK) {
-                textBox1.Font = dlg.Font;
+                textArea.Font = dlg.Font;
             }
         }
 
         private void undoToolStripMenuItem_Click(object sender, EventArgs e) {
-            textBox1.Undo();
+            textArea.Undo();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e) {
+        private void textArea_TextChanged(object sender, EventArgs e) {
             saved = false;
 
-            //textBox1.SelectionStart = textBox1.Text.Length;
-            //textBox1.SelectionLength = 0;
-            //textBox1.ScrollToCaret();
-
-            string[] lines = Regex.Split(textBox1.Text.Trim(), "\r\n");
-            int lineCount = lines.Count();
-            toolStripStatusLabel1.Text = string.Format("Lines: {0}", lineCount);
+            var lineCount = help.LineCount(textArea);
+            toolStripStatusLabel1.Text = $"Lines: {lineCount}";
             statusStrip1.Refresh();
 
-            string[] words = Regex.Split(textBox1.Text.Trim(), "\\w+");
-            int wordCounter = 0;
-            wordCounter = words.Count();
-            wordCounter -= 1;
-            toolStripStatusLabel2.Text = string.Format("Words: {0}", wordCounter);
+            var wordCounter = help.WordCount(textArea);
+            toolStripStatusLabel2.Text = $"Words: {wordCounter}";
             statusStrip1.Refresh();
         }
 
         private void timeDateToolStripMenuItem_Click(object sender, EventArgs e) {
-            string time = DateTime.Now.ToString();
-            textBox1.AppendText(time);
+            var time = help.ReturnTime();
+            textArea.AppendText(time);
 
         }
 
@@ -145,7 +134,7 @@ namespace notepad {
             }
         }
 
-        //=======================SAVE AND LOADING=======================================
+        #region Saving and Loading
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
             if (string.IsNullOrEmpty(filename)) {
@@ -153,20 +142,24 @@ namespace notepad {
                     return;
                 }
             }
-            SaveCurrentFile();
+            help.SaveCurrentFile(filename, textArea.Text);
+            help.SetWindowTitle(Path.GetFileName(filename));
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e) {
-            int size = -1;
-            OpenFileDialog open = new OpenFileDialog();
+            var size = -1;
+            var open = new OpenFileDialog();
             DialogResult result = open.ShowDialog();
+
             if (result == DialogResult.OK) {
-                string file = open.FileName;
+                var file = open.FileName;
+                filename = file;
                 try {
-                    textBox1.Text = File.ReadAllText(file);
-                    size = textBox1.Text.Length;
-                    SetWindowTitle(file);
-                } catch (IOException) {
+                    textArea.Text = File.ReadAllText(file);
+                    size = textArea.Text.Length;
+                    this.Text = help.SetWindowTitle(Path.GetFileName(filename));
+                } catch (IOException io) {
+                    System.Diagnostics.Debug.WriteLine($"IO exception occured: {io.Message}");
                 }
             }
         }
@@ -176,26 +169,16 @@ namespace notepad {
                 return;
             }
 
-            SaveCurrentFile();
-            //SaveFileDialog save = new SaveFileDialog();
-            //DialogResult result = save.ShowDialog();
-            //if (result == DialogResult.OK)
-            //{
-            //    string file = save.FileName;
-            //    try
-            //    {
-            //        File.WriteAllText(file, textBox1.Text);
-            //    }
-            //    catch (IOException)
-            //    {
-            //    }
-            //}
-            //saved = true;
+            var result = help.SaveCurrentFile(filename, textArea.Text);
+            help.SetWindowTitle(Path.GetFileName(filename));
+        }
+
+        public void OpenFile(string file) {
+            this.filename = file;
         }
 
         DialogResult ShowSaveDialog() {
             var dialog = new SaveFileDialog();
-            // set your path, filter, title, whatever
             var result = dialog.ShowDialog();
 
             if (result == DialogResult.OK) {
@@ -204,22 +187,6 @@ namespace notepad {
 
             return result;
         }
-
-        void SaveCurrentFile() {
-            //using (var writer = new StreamWriter(filename))
-            //{
-            // write your file
-            try {
-                File.WriteAllText(filename, textBox1.Text);
-                SetWindowTitle(filename);
-            } catch (IOException) {
-            }
-            //}
-            saved = true;
-        }
-
-        void SetWindowTitle(string fileName) {
-            this.Text = string.Format("{0} - Text Editor", Path.GetFileName(fileName));
-        }
+        #endregion
     } // end class
 } // end namespace
