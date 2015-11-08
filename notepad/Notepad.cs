@@ -9,14 +9,17 @@ using Microsoft.VisualBasic;
 namespace notepad {
     [Serializable]
     public partial class MainWindow : Form {
+
+        private bool saved = false;
+        private string filename;
+
+        Helper help = new Helper();
+        Serialisation serialise = new Serialisation();
+
         public MainWindow() {
             InitializeComponent();
             wordWrapToolStripMenuItem.BackColor = Color.Red;
         }
-
-        bool saved = false;
-        private string filename;
-        Helper help = new Helper();
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
             MessageBox.Show("Written by Luke Cahill");
@@ -24,7 +27,7 @@ namespace notepad {
 
         #region Copy, Paste & Cut
         private void pasteToolStripMenuItem1_Click(object sender, EventArgs e) {
-            if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) == true) {
+            if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text)) {
                 textArea.Paste();
                 Clipboard.Clear();
             }
@@ -48,10 +51,10 @@ namespace notepad {
             string search = Interaction.InputBox("What would you like to search for?", "Search", "");
             //string searchFor = Regex.Split(textBox1.Text.Trim(), search);
 
-            int pos = textArea.Text.IndexOf(search);
-            int length = search.Length;
-            if (pos != -1) {
-                textArea.SelectionStart = pos;
+            var position = textArea.Text.IndexOf(search);
+            var length = search.Length;
+            if (position != -1) {
+                textArea.SelectionStart = position;
                 textArea.SelectionLength = length;
             } else {
                 MessageBox.Show($"\'{search}\'" + " was not found!", "Error");
@@ -67,11 +70,7 @@ namespace notepad {
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (saved) {
-                Environment.Exit(0);
-            } else {
-                MessageBox.Show("Would you like to save before exiting?", "Warning");
-            }
+            help.CheckExit(saved);
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -87,11 +86,7 @@ namespace notepad {
         }
 
         private void customizeToolStripMenuItem_Click(object sender, EventArgs e) {
-            FontDialog dlg = new FontDialog();
-            dlg.ShowColor = true;
-            dlg.ShowApply = true;
-            dlg.ShowEffects = true;
-            dlg.ShowHelp = true;
+            var dlg = help.SetUpFontDialog();
 
             if (dlg.ShowDialog() == DialogResult.OK) {
                 textArea.Font = dlg.Font;
@@ -128,7 +123,7 @@ namespace notepad {
             if (statusStrip1.Visible == false) {
                 statusStrip1.Visible = true;
                 statusStrip1.Refresh();
-            } else if (statusStrip1.Visible == true) {
+            } else if (statusStrip1.Visible) {
                 statusStrip1.Visible = false;
                 statusStrip1.Refresh();
             }
@@ -142,7 +137,7 @@ namespace notepad {
                     return;
                 }
             }
-            help.SaveCurrentFile(filename, textArea.Text);
+            serialise.SaveCurrentFile(filename, textArea.Text);
             help.SetWindowTitle(Path.GetFileName(filename));
         }
 
@@ -169,7 +164,7 @@ namespace notepad {
                 return;
             }
 
-            var result = help.SaveCurrentFile(filename, textArea.Text);
+            var result = serialise.SaveCurrentFile(filename, textArea.Text);
             help.SetWindowTitle(Path.GetFileName(filename));
         }
 
