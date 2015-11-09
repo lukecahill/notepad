@@ -41,6 +41,8 @@ namespace notepad {
 
                 e.Cancel = close;
             } else {
+                // only want to prompt to save if the user is the close reason. Otherwise
+                //      return as seen here e.g. if the computer is shutting down.
                 return;
             }
         }
@@ -53,7 +55,7 @@ namespace notepad {
         private void pasteToolStripMenuItem1_Click(object sender, EventArgs e) {
             if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text)) {
                 textArea.Paste();
-                Clipboard.Clear();
+                //Clipboard.Clear();
             }
         }
 
@@ -73,13 +75,11 @@ namespace notepad {
 
         public void searchToolStripMenuItem_Click(object sender, EventArgs e) {
             string search = Interaction.InputBox("What would you like to search for?", "Search", "");
-            //string searchFor = Regex.Split(textBox1.Text.Trim(), search);
 
-            var position = textArea.Text.IndexOf(search);
-            var length = search.Length;
-            if (position != -1) {
-                textArea.SelectionStart = position;
-                textArea.SelectionLength = length;
+            var found = Utilities.ReturnSearch(textArea, search);
+            if (found != null) {
+                textArea.SelectionStart = found[0];
+                textArea.SelectionLength = found[1];
             } else {
                 MessageBox.Show($"\'{search}\'" + " was not found!", "Error");
             }
@@ -124,13 +124,10 @@ namespace notepad {
 
         private void textArea_TextChanged(object sender, EventArgs e) {
             saved = false;
-
-            var lineCount = Utilities.LineCount(textArea);
-            toolStripStatusLabel1.Text = $"Lines: {lineCount}";
+            toolStripStatusLabel1.Text = $"Lines: {Utilities.LineCount(textArea)}";
             statusStrip1.Refresh();
 
-            var wordCounter = Utilities.WordCount(textArea);
-            toolStripStatusLabel2.Text = $"Words: {wordCounter}";
+            toolStripStatusLabel2.Text = $"Words: {Utilities.WordCount(textArea)}";
             statusStrip1.Refresh();
         }
 
