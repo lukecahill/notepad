@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
 namespace notepad {
-    [Serializable]
     public partial class MainWindow : Form {
 
         private bool saved = false;
@@ -115,6 +114,7 @@ namespace notepad {
 
             if (dlg.ShowDialog() == DialogResult.OK) {
                 textArea.Font = dlg.Font;
+                textArea.ForeColor = dlg.Color;
             }
         }
 
@@ -156,7 +156,7 @@ namespace notepad {
         private void statusbarToolStripMenuItem_Click(object sender, EventArgs e) {
             if(statusStrip1.Visible) {
                 statusStrip1.Visible = false;
-            } else {
+            } else if(statusStrip1.Visible == false) {
                 statusStrip1.Visible = true;
             }
         }
@@ -212,6 +212,7 @@ namespace notepad {
         DialogResult ShowSaveDialog() {
             var dialog = new SaveFileDialog();
             dialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+
             var result = dialog.ShowDialog();
 
             if (result == DialogResult.OK) {

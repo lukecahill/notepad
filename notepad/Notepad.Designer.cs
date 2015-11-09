@@ -398,6 +398,7 @@
             this.textArea.BackColor = System.Drawing.SystemColors.Info;
             this.textArea.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textArea.Location = new System.Drawing.Point(0, 22);
+            this.textArea.MaxLength = 2147483646;
             this.textArea.Multiline = true;
             this.textArea.Name = "textArea";
             this.textArea.ScrollBars = System.Windows.Forms.ScrollBars.Both;
