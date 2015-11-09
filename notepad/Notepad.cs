@@ -31,6 +31,7 @@ namespace notepad {
                         close = false;
                         break;
                     case 1:
+                        exitAfterSave = true;
                         saveAsToolStripMenuItem.PerformClick();
                         close = true;
                         break;
