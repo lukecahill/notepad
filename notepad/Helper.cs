@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -73,11 +71,21 @@ namespace notepad {
         /// Checks if the note has been saved before the user exits.
         /// </summary>
         /// <param name="saved">Boolean of if the note has been saved</param>
-        public void CheckExit(bool saved) {
+        public bool CheckExit(bool saved) {
             if (saved) {
-                Environment.Exit(0);
+                return false;
             } else {
-                MessageBox.Show("Would you like to save before exiting?", "Warning");
+
+                var ok = MessageBox.Show("Would you like to save before exiting?", "Warning", MessageBoxButtons.YesNoCancel);
+                if(ok == DialogResult.Yes) {
+                    // save the note
+                    return true;
+                } else if(ok == DialogResult.No) {
+                    return false;
+                } else {
+                    // do nothing
+                    return true;
+                }
             }
         }
     }

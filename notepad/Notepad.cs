@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
@@ -19,6 +17,17 @@ namespace notepad {
         public MainWindow() {
             InitializeComponent();
             wordWrapToolStripMenuItem.BackColor = Color.Red;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e) {
+            base.OnFormClosing(e);
+
+            if(e.CloseReason == CloseReason.WindowsShutDown) {
+                return;
+            }
+            
+            var close = help.CheckExit(saved);
+            e.Cancel = close;
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
