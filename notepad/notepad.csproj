@@ -85,14 +85,13 @@
     <Compile Include="Notepad.Designer.cs">
       <DependentUpon>Notepad.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helper.cs" />
+    <Compile Include="ApplicationHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Serialisation.cs" />
     <Compile Include="Utilities.cs" />
     <EmbeddedResource Include="Notepad.resx">
       <DependentUpon>Notepad.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="notepad_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>

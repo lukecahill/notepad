@@ -10,8 +10,9 @@ namespace notepad {
 
         private bool saved = false;
         private string filename;
+        private bool exitAfterSave = false;
 
-        Helper help = new Helper();
+        ApplicationHelper help = new ApplicationHelper();
         Serialisation serialise = new Serialisation();
 
         public MainWindow() {
@@ -21,9 +22,23 @@ namespace notepad {
 
         protected override void OnFormClosing(FormClosingEventArgs e) {
             base.OnFormClosing(e);
+            bool close = true;
 
             if(e.CloseReason == CloseReason.UserClosing) {
-                var close = help.CheckExit(saved);
+                var isSaved = help.CheckExit(saved);
+                switch (isSaved) {
+                    case 0:
+                        close = false;
+                        break;
+                    case 1:
+                        saveAsToolStripMenuItem.PerformClick();
+                        close = true;
+                        break;
+                    case 2:
+                        close = true;
+                        break;
+                }
+
                 e.Cancel = close;
             } else {
                 return;
@@ -119,8 +134,7 @@ namespace notepad {
         }
 
         private void timeDateToolStripMenuItem_Click(object sender, EventArgs e) {
-            var time = Utilities.ReturnTime();
-            textArea.AppendText(time);
+            textArea.AppendText(Utilities.ReturnTime());
 
         }
 
@@ -135,6 +149,14 @@ namespace notepad {
             } else if (statusStrip1.Visible) {
                 statusStrip1.Visible = false;
                 statusStrip1.Refresh();
+            }
+        }
+
+        private void statusbarToolStripMenuItem_Click(object sender, EventArgs e) {
+            if(statusStrip1.Visible) {
+                statusStrip1.Visible = false;
+            } else {
+                statusStrip1.Visible = true;
             }
         }
 
@@ -160,6 +182,10 @@ namespace notepad {
             var result = serialise.SaveCurrentFile(filename, textArea.Text);
             help.SetWindowTitle(Path.GetFileName(filename));
             saved = true;
+
+            if(exitAfterSave) {
+                Environment.Exit(0);
+            }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -172,21 +198,19 @@ namespace notepad {
                 filename = file;
 
                 try {
-                    serialise.OpenFile(file);
+                    textArea.Text = serialise.OpenFile(file);
                     size = textArea.Text.Length;
                     this.Text = help.SetWindowTitle(Path.GetFileName(filename));
+                    saved = true;
                 } catch (IOException io) {
                     System.Diagnostics.Debug.WriteLine($"IO exception occured: {io.Message}");
                 }
             }
         }
 
-        public void OpenFile(string file) {
-            this.filename = file;
-        }
-
         DialogResult ShowSaveDialog() {
             var dialog = new SaveFileDialog();
+            dialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
             var result = dialog.ShowDialog();
 
             if (result == DialogResult.OK) {
