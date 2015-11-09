@@ -212,7 +212,11 @@ namespace notepad {
         DialogResult ShowSaveDialog() {
             var dialog = new SaveFileDialog();
             dialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-
+            if(!String.IsNullOrEmpty(filename)) {
+                var saveFile = Path.GetFileName(filename);
+                dialog.FileName = saveFile;
+            }
+            
             var result = dialog.ShowDialog();
 
             if (result == DialogResult.OK) {
