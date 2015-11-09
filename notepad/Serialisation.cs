@@ -4,6 +4,13 @@ using System.Windows.Forms;
 
 namespace notepad {
     public class Serialisation {
+
+        /// <summary>
+        /// Writes the current text in the textarea to the selected file.
+        /// </summary>
+        /// <param name="filename">String name of the file to write too</param>
+        /// <param name="textToWrite">String to write to the specified file</param>
+        /// <returns>Bool of success/failure</returns>
         public bool SaveCurrentFile(string filename, string textToWrite) {
             try {
                 File.WriteAllText(filename, textToWrite);
@@ -14,54 +21,13 @@ namespace notepad {
             }
         }
 
-        // Things below this line do not currently work. 
-        //      Will need to be implmented
-        public DialogResult ShowSaveDialog() {
-            var dialog = new SaveFileDialog();
-            var result = dialog.ShowDialog();
-
-            if (result == DialogResult.OK) {
-                var file = dialog.FileName;
-                var form = new MainWindow();
-                form.OpenFile(file);
-            }
-
-            return result;
-        }
-
-        public OpenFileDialog OpenDialog(string filename, TextBox textArea) {
-            var size = -1;
-            var open = new OpenFileDialog();
-            var help = new Helper();
-            var Text = "";
-
-            DialogResult result = open.ShowDialog();
-
-            if (result == DialogResult.OK) {
-                var file = open.FileName;
-                filename = file;
-                try {
-                    textArea.Text = File.ReadAllText(file);
-                    size = textArea.Text.Length;
-                    Text = help.SetWindowTitle(Path.GetFileName(filename));
-                } catch (IOException io) {
-                    Debug.WriteLine($"IO exception occured: {io.Message}");
-                }
-            }
-            return null;
-        }
-
-        public void SaveFile(string filename, TextBox textArea) {
-            var help = new Helper();
-            var form = new MainWindow();
-
-            if (string.IsNullOrEmpty(filename)) {
-                if (ShowSaveDialog() != DialogResult.OK) {
-                    return;
-                }
-            }
-            SaveCurrentFile(filename, textArea.Text);
-            help.SetWindowTitle(Path.GetFileName(filename));
+        /// <summary>
+        /// Reads the text from the filename specified.
+        /// </summary>
+        /// <param name="file">The name of the file to open and read</param>
+        /// <returns>String with the contents of the file.</returns>
+        public string OpenFile(string file) {
+            return File.ReadAllText(file);
         }
     }
 }
