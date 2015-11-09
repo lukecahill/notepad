@@ -22,12 +22,12 @@ namespace notepad {
         protected override void OnFormClosing(FormClosingEventArgs e) {
             base.OnFormClosing(e);
 
-            if(e.CloseReason == CloseReason.WindowsShutDown) {
+            if(e.CloseReason == CloseReason.UserClosing) {
+                var close = help.CheckExit(saved);
+                e.Cancel = close;
+            } else {
                 return;
             }
-            
-            var close = help.CheckExit(saved);
-            e.Cancel = close;
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {

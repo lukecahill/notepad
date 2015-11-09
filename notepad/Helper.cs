@@ -76,7 +76,7 @@ namespace notepad {
                 return false;
             } else {
 
-                var ok = MessageBox.Show("Would you like to save before exiting?", "Warning", MessageBoxButtons.YesNoCancel);
+                var ok = MessageBox.Show("Would you like to save before exiting?", "Unsaved changes!", MessageBoxButtons.YesNoCancel);
                 if(ok == DialogResult.Yes) {
                     // save the note
                     return true;
