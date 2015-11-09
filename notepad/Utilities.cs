@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace notepad {
-    public class Utilities {
+    public static class Utilities {
 
         /// <summary>
         /// Counts the number of lines of text there are in the program

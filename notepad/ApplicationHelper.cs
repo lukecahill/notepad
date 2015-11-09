@@ -1,9 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace notepad {
-    public class Helper {
+    public class ApplicationHelper {
         /// <summary>
         /// Format the window title for the form
         /// </summary>
@@ -25,20 +24,20 @@ namespace notepad {
         /// Checks if the note has been saved before the user exits.
         /// </summary>
         /// <param name="saved">Boolean of if the note has been saved</param>
-        public bool CheckExit(bool saved) {
+        public int CheckExit(bool saved) {
             if (saved) {
-                return false;
+                return 0;
             } else {
 
                 var ok = MessageBox.Show("Would you like to save before exiting?", "Unsaved changes!", MessageBoxButtons.YesNoCancel);
                 if(ok == DialogResult.Yes) {
                     // save the note
-                    return true;
+                    return 1;
                 } else if(ok == DialogResult.No) {
-                    return false;
+                    return 0;
                 } else {
                     // do nothing
-                    return true;
+                    return 2;
                 }
             }
         }
