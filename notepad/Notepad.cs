@@ -95,7 +95,7 @@ namespace notepad {
         }
 
         private void customizeToolStripMenuItem_Click(object sender, EventArgs e) {
-            var dlg = help.SetUpFontDialog();
+            var dlg = Utilities.SetUpFontDialog();
 
             if (dlg.ShowDialog() == DialogResult.OK) {
                 textArea.Font = dlg.Font;
@@ -109,17 +109,17 @@ namespace notepad {
         private void textArea_TextChanged(object sender, EventArgs e) {
             saved = false;
 
-            var lineCount = help.LineCount(textArea);
+            var lineCount = Utilities.LineCount(textArea);
             toolStripStatusLabel1.Text = $"Lines: {lineCount}";
             statusStrip1.Refresh();
 
-            var wordCounter = help.WordCount(textArea);
+            var wordCounter = Utilities.WordCount(textArea);
             toolStripStatusLabel2.Text = $"Words: {wordCounter}";
             statusStrip1.Refresh();
         }
 
         private void timeDateToolStripMenuItem_Click(object sender, EventArgs e) {
-            var time = help.ReturnTime();
+            var time = Utilities.ReturnTime();
             textArea.AppendText(time);
 
         }
@@ -146,8 +146,20 @@ namespace notepad {
                     return;
                 }
             }
+
             serialise.SaveCurrentFile(filename, textArea.Text);
             help.SetWindowTitle(Path.GetFileName(filename));
+            saved = true;
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (ShowSaveDialog() != DialogResult.OK) {
+                return;
+            }
+
+            var result = serialise.SaveCurrentFile(filename, textArea.Text);
+            help.SetWindowTitle(Path.GetFileName(filename));
+            saved = true;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -158,23 +170,15 @@ namespace notepad {
             if (result == DialogResult.OK) {
                 var file = open.FileName;
                 filename = file;
+
                 try {
-                    textArea.Text = File.ReadAllText(file);
+                    serialise.OpenFile(file);
                     size = textArea.Text.Length;
                     this.Text = help.SetWindowTitle(Path.GetFileName(filename));
                 } catch (IOException io) {
                     System.Diagnostics.Debug.WriteLine($"IO exception occured: {io.Message}");
                 }
             }
-        }
-
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (ShowSaveDialog() != DialogResult.OK) {
-                return;
-            }
-
-            var result = serialise.SaveCurrentFile(filename, textArea.Text);
-            help.SetWindowTitle(Path.GetFileName(filename));
         }
 
         public void OpenFile(string file) {
