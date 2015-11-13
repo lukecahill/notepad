@@ -11,33 +11,45 @@ namespace notepad {
         private string filename;
         private bool exitAfterSave = false;
 
+        // Instantiate the helper class and the serialising class. Utilities is static and cannot be instantiated.
         ApplicationHelper help = new ApplicationHelper();
         Serialisation serialise = new Serialisation();
 
         public MainWindow() {
             InitializeComponent();
             wordWrapToolStripMenuItem.BackColor = Color.Red;
+            saved = true;
+        }
+
+        /// <summary>
+        /// Used to check whether to cancel the close event for saving, or to just exit without saving.
+        /// </summary>
+        /// <param name="code">Integer of the code returned from checking if the document should be saved or not.</param>
+        /// <returns>Boolean of whether to exit the application or not.</returns>
+        private bool ExitApplication(int code) {
+            var close = true;
+            switch (code) {
+                case 0:
+                    close = false;
+                    break;
+                case 1:
+                    exitAfterSave = true;
+                    saveAsToolStripMenuItem.PerformClick();
+                    close = true;
+                    break;
+                case 2:
+                    close = true;
+                    break;
+            }
+            return close;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e) {
             base.OnFormClosing(e);
-            bool close = true;
 
             if(e.CloseReason == CloseReason.UserClosing) {
                 var isSaved = help.CheckExit(saved);
-                switch (isSaved) {
-                    case 0:
-                        close = false;
-                        break;
-                    case 1:
-                        exitAfterSave = true;
-                        saveAsToolStripMenuItem.PerformClick();
-                        close = true;
-                        break;
-                    case 2:
-                        close = true;
-                        break;
-                }
+                var close = ExitApplication(isSaved);
 
                 e.Cancel = close;
             } else {
@@ -94,7 +106,24 @@ namespace notepad {
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
-            help.CheckExit(saved);
+            //var result = help.CheckExit(saved);
+            Application.Exit();
+        }
+
+        private void printToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (!String.IsNullOrEmpty(filename)) {
+                help.PrintDocument();
+            } else {
+                MessageBox.Show($"Please save your file before printing!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
+        }
+
+        private void printPreviewToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (!String.IsNullOrEmpty(filename)) {
+                help.PrintPreview();
+            } else {
+                MessageBox.Show($"Please save your file before printing!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e) {
