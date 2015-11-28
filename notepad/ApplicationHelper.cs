@@ -3,6 +3,9 @@ using System.Drawing.Printing;
 using System.Windows.Forms;
 
 namespace notepad {
+    /// <summary>
+    /// Application helper for printing, new instances, set the window title, checking whether to close.
+    /// </summary>
     public class ApplicationHelper {
         /// <summary>
         /// Format the window title for the form
