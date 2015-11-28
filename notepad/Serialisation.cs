@@ -1,6 +1,9 @@
 ﻿using System.IO;
 
 namespace notepad {
+    /// <summary>
+    /// Use to save the current file, and to open a new text document.
+    /// </summary>
     public class Serialisation {
 
         /// <summary>
