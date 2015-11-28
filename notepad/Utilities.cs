@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace notepad {
+    /// <summary>
+    /// Static class of text utilities such as word count, line count, set up font dialog, return time, and search the text.
+    /// </summary>
     public static class Utilities {
 
         /// <summary>

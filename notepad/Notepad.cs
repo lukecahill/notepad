@@ -15,6 +15,9 @@ namespace notepad {
         ApplicationHelper help = new ApplicationHelper();
         Serialisation serialise = new Serialisation();
 
+        /// <summary>
+        /// Initialise the form which contains the text editor
+        /// </summary>
         public MainWindow() {
             InitializeComponent();
             wordWrapToolStripMenuItem.BackColor = Color.Red;
@@ -44,6 +47,10 @@ namespace notepad {
             return close;
         }
 
+        /// <summary>
+        /// Overrides the defuault behaviour of OnFormClosing
+        /// </summary>
+        /// <param name="e">FormClosingEventArgs use to find the close reason, and to cancel the close if necessary</param>
         protected override void OnFormClosing(FormClosingEventArgs e) {
             base.OnFormClosing(e);
 
@@ -85,7 +92,7 @@ namespace notepad {
 
         #endregion
 
-        public void searchToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void searchToolStripMenuItem_Click(object sender, EventArgs e) {
             string search = Interaction.InputBox("What would you like to search for?", "Search", "");
 
             var found = Utilities.ReturnSearch(textArea, search);
