@@ -20,26 +20,33 @@ namespace notepad {
 		}
 
 		private void next_Click(object sender, EventArgs e) {
-			var item = found[current++];
-			if (current > found.Count) {
-				current = found.Count;
-				next.Enabled = false;
+			if(current == found.Count) {
+				return;	// should alert the user really.
 			}
+
+			previous.Enabled = true;
+			var item = found[current++];
 			SetTextBoxSelection(item.Postition, item.Length);
 		}
 
 		private void previous_Click(object sender, EventArgs e) {
-			var item = found[current--];
-			if (current > found.Count) {
-				current = found.Count;
-				previous.Enabled = false;
+			if(current == 0) {
+				return; // should alert the user really.
 			}
+
+			next.Enabled = true;
+			var item = found[current--];
 			SetTextBoxSelection(item.Postition, item.Length);
 		}
 
 		private void searchButton_Click(object sender, EventArgs e) {
 			var match = new Regex(textToFind.Text);
 			var all = match.Matches(textbox.Text);
+
+			if(textToFind.Equals(' ') || String.IsNullOrWhiteSpace(textToFind.Text)) {
+				return;	// should also handle this, with a message box or something.
+			}
+
 
 			if(all.Count > 0) {
 				var index = 0;
@@ -52,7 +59,6 @@ namespace notepad {
 					index++;
 				}
 				next.Enabled = true;
-				previous.Enabled = true;
 				SetTextBoxSelection(found[current].Postition, found[current].Length);
 			} else {
 				MessageBox.Show("Text not found!");
