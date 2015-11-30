@@ -45,6 +45,7 @@ namespace notepad {
 		private void searchButton_Click(object sender, EventArgs e) {
 			var match = new Regex(textToFind.Text);
 			var all = match.Matches(textbox.Text);
+			
 
 			if(textToFind.Equals(' ') || String.IsNullOrWhiteSpace(textToFind.Text)) {
 				MessageBox.Show("Please enter some text to find.");
@@ -55,16 +56,12 @@ namespace notepad {
 			current = 0;
 			if(all.Count > 0) {
 				var index = 0;
-				foreach(var item in all) {
-					var word = item.ToString();
-					var result = new SearchResult {
-						Postition = textbox.Text.IndexOf(word, index),
-						Length = word.Length,
-						Index = index
-					};
+				foreach(Match item in all) {
+					var result = CreateResult(item.Index, item.Value.Length, index);
 					found.Add(result);
 					index++;
 				}
+
 				SetButtons();
 				SetTextBoxSelection(found[current].Postition, found[current].Length);
 			} else {
@@ -87,5 +84,12 @@ namespace notepad {
 			}
 		}
 
+		private SearchResult CreateResult(int position, int length, int index) {
+			return new SearchResult {
+				Postition = position,
+				Length = length,
+				Index = index
+			};
+		}
 	}
 }

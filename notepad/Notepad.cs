@@ -74,7 +74,6 @@ namespace notepad {
         private void pasteToolStripMenuItem1_Click(object sender, EventArgs e) {
             if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text)) {
                 textArea.Paste();
-                //Clipboard.Clear();
             }
         }
 
@@ -95,15 +94,6 @@ namespace notepad {
         private void searchToolStripMenuItem_Click(object sender, EventArgs e) {
 			var search = new Search(textArea);
 			search.Show();
-            //string search = Interaction.InputBox("What would you like to search for?", "Search", "");
-
-            //var found = Utilities.ReturnSearch(textArea, search);
-            //if (found != null) {
-            //    textArea.SelectionStart = found[0];
-            //    textArea.SelectionLength = found[1];
-            //} else {
-            //    MessageBox.Show($"\'{search}\'" + " was not found!", "Error");
-            //}
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) {
