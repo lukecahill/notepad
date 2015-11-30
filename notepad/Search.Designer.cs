@@ -68,6 +68,7 @@
 			this.textToFind.Name = "textToFind";
 			this.textToFind.Size = new System.Drawing.Size(179, 20);
 			this.textToFind.TabIndex = 1;
+			this.textToFind.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textToFind_KeyPress);
 			// 
 			// label1
 			// 

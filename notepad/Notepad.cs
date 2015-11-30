@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 
 namespace notepad {
     public partial class MainWindow : Form {
@@ -92,7 +91,8 @@ namespace notepad {
         #endregion
 
         private void searchToolStripMenuItem_Click(object sender, EventArgs e) {
-			var search = new Search(textArea);
+			var search = new Search(textArea, this);
+			
 			search.Show();
         }
 

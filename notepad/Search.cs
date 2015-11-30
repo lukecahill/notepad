@@ -10,14 +10,17 @@ namespace notepad {
 		List<SearchResult> found = new List<SearchResult>();
 		TextBox textbox;
 		int current = 0;
+		MainWindow mainWindow;
 
 		/// <summary>
-		/// Initialise this class with the textbox.
+		/// Initialise this class with the textbox, and MainWindow object.
 		/// </summary>
 		/// <param name="text">TextBox of the text editor writing area</param>
-		public Search(TextBox text) {
+		/// <param name="main">MainWindow of the text editor writing area</param>
+		public Search(TextBox text, MainWindow main) {
 			InitializeComponent();
 			textbox = text;
+			mainWindow = main;
 		}
 
 		private void next_Click(object sender, EventArgs e) {
@@ -29,6 +32,7 @@ namespace notepad {
 			var item = found.Single(i => i.Index == current);
 			SetTextBoxSelection(item.Postition, item.Length);
 			SetButtons();
+			mainWindow.BringToFront();
 		}
 
 		private void previous_Click(object sender, EventArgs e) {
@@ -40,6 +44,7 @@ namespace notepad {
 			var item = found.Single(i => i.Index == current);
 			SetTextBoxSelection(item.Postition, item.Length);
 			SetButtons();
+			mainWindow.BringToFront();
 		}
 
 		private void searchButton_Click(object sender, EventArgs e) {
@@ -64,6 +69,7 @@ namespace notepad {
 
 				SetButtons();
 				SetTextBoxSelection(found[current].Postition, found[current].Length);
+				mainWindow.BringToFront();
 			} else {
 				MessageBox.Show("Text not found!");
 			}
@@ -75,10 +81,10 @@ namespace notepad {
 		}
 
 		private void SetButtons() {
-			if(current == (found.Count - 1)) {
+			if(current == (found.Count - 1) && (found.Count > 1)) {
 				previous.Enabled = true;
 				next.Enabled = false;
-			} else if(current == 0) {
+			} else if(current == 0 && (found.Count > 1)) {
 				previous.Enabled = false;
 				next.Enabled = true;
 			}
@@ -90,6 +96,12 @@ namespace notepad {
 				Length = length,
 				Index = index
 			};
+		}
+
+		private void textToFind_KeyPress(object sender, KeyPressEventArgs e) {
+			if(e.KeyChar == (char)Keys.Enter) {
+				searchButton.PerformClick();	// simulate a mouse click if return is pressed.
+			}
 		}
 	}
 }
