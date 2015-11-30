@@ -22,24 +22,24 @@ namespace notepad {
 
 		private void next_Click(object sender, EventArgs e) {
 			if(current == (found.Count - 1)) {
-				return;	// should alert the user really.
+				return;	// should never actually be hit.
 			}
-
-			previous.Enabled = true;
+			
 			current++;
-			var item = found.Where(i => i.Index == current).Single();
+			var item = found.Single(i => i.Index == current);
 			SetTextBoxSelection(item.Postition, item.Length);
+			SetButtons();
 		}
 
 		private void previous_Click(object sender, EventArgs e) {
 			if(current == 0) {
-				return; // should alert the user really.
+				return; // should never actually be hit.
 			}
-
-			next.Enabled = true;
+			
 			current--;
-			var item = found.Where(i => i.Index == current).Single();
+			var item = found.Single(i => i.Index == current);
 			SetTextBoxSelection(item.Postition, item.Length);
+			SetButtons();
 		}
 
 		private void searchButton_Click(object sender, EventArgs e) {
@@ -47,6 +47,7 @@ namespace notepad {
 			var all = match.Matches(textbox.Text);
 
 			if(textToFind.Equals(' ') || String.IsNullOrWhiteSpace(textToFind.Text)) {
+				MessageBox.Show("Please enter some text to find.");
 				return;	// should also handle this, with a message box or something.
 			}
 
@@ -64,7 +65,7 @@ namespace notepad {
 					found.Add(result);
 					index++;
 				}
-				next.Enabled = true;
+				SetButtons();
 				SetTextBoxSelection(found[current].Postition, found[current].Length);
 			} else {
 				MessageBox.Show("Text not found!");
@@ -75,5 +76,16 @@ namespace notepad {
 			textbox.SelectionStart = start;
 			textbox.SelectionLength = length;
 		}
+
+		private void SetButtons() {
+			if(current == (found.Count - 1)) {
+				previous.Enabled = true;
+				next.Enabled = false;
+			} else if(current == 0) {
+				previous.Enabled = false;
+				next.Enabled = true;
+			}
+		}
+
 	}
 }
