@@ -49,7 +49,7 @@ namespace notepad {
 
 		private void searchButton_Click(object sender, EventArgs e) {
 			var match = new Regex(textToFind.Text);
-			var all = match.Matches(textbox.Text);
+			var results = match.Matches(textbox.Text);
 			
 
 			if(textToFind.Equals(' ') || String.IsNullOrWhiteSpace(textToFind.Text)) {
@@ -59,17 +59,8 @@ namespace notepad {
 
 			found.Clear();
 			current = 0;
-			if(all.Count > 0) {
-				var index = 0;
-				foreach(Match item in all) {
-					var result = CreateResult(item.Index, item.Value.Length, index);
-					found.Add(result);
-					index++;
-				}
-
-				SetButtons();
-				SetTextBoxSelection(found[current].Postition, found[current].Length);
-				mainWindow.BringToFront();
+			if(results.Count > 0) {
+				FoundResults(results);
 			} else {
 				MessageBox.Show("Text not found!");
 			}
@@ -102,6 +93,19 @@ namespace notepad {
 			if(e.KeyChar == (char)Keys.Enter) {
 				searchButton.PerformClick();	// simulate a mouse click if return is pressed.
 			}
+		}
+
+		private void FoundResults(MatchCollection match) {
+			var index = 0;
+			foreach (Match item in match) {
+				var result = CreateResult(item.Index, item.Value.Length, index);
+				found.Add(result);
+				index++;
+			}
+
+			SetButtons();
+			SetTextBoxSelection(found[current].Postition, found[current].Length);
+			mainWindow.BringToFront();
 		}
 	}
 }
