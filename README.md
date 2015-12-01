@@ -11,7 +11,7 @@ Currently has support for:
 
 > Print preview
 
-> Search - new, better search to be fully implemented soon
+> Search
 
 > Word and line count
 
