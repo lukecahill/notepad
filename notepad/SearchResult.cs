@@ -5,6 +5,5 @@
 	public class SearchResult {
 		public int Postition { get; set; }
 		public int Length { get; set; }
-		public int Index { get; set; }
 	}
 }

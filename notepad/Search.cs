@@ -29,7 +29,7 @@ namespace notepad {
 			}
 			
 			current++;
-			var item = found.Single(i => i.Index == current);
+			var item = found[current];
 			SetTextBoxSelection(item.Postition, item.Length);
 			SetButtons();
 			mainWindow.BringToFront();
@@ -41,7 +41,7 @@ namespace notepad {
 			}
 			
 			current--;
-			var item = found.Single(i => i.Index == current);
+			var item = found[current];
 			SetTextBoxSelection(item.Postition, item.Length);
 			SetButtons();
 			mainWindow.BringToFront();
@@ -81,11 +81,10 @@ namespace notepad {
 			}
 		}
 
-		private SearchResult CreateResult(int position, int length, int index) {
+		private SearchResult CreateResult(int position, int length) {
 			return new SearchResult {
 				Postition = position,
-				Length = length,
-				Index = index
+				Length = length
 			};
 		}
 
@@ -98,7 +97,7 @@ namespace notepad {
 		private void FoundResults(MatchCollection match) {
 			var index = 0;
 			foreach (Match item in match) {
-				var result = CreateResult(item.Index, item.Value.Length, index);
+				var result = CreateResult(item.Index, item.Value.Length);
 				found.Add(result);
 				index++;
 			}
