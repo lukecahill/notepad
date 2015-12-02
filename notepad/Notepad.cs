@@ -105,8 +105,12 @@ namespace notepad {
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
-            //var result = help.CheckExit(saved);
-            Application.Exit();
+			if(!saved) {
+				var closing = new FormClosingEventArgs(CloseReason.UserClosing, false);
+				OnFormClosing(closing);
+			} else {
+				Environment.Exit(0);
+			}
         }
 
         private void printToolStripMenuItem_Click(object sender, EventArgs e) {
