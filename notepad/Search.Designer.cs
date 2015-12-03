@@ -95,6 +95,8 @@
 			this.MinimizeBox = false;
 			this.Name = "Search";
 			this.Text = "Search";
+			this.MouseEnter += new System.EventHandler(this.Search_MouseEnter);
+			this.MouseLeave += new System.EventHandler(this.Search_MouseLeave);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

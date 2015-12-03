@@ -20,6 +20,7 @@ namespace notepad {
 			InitializeComponent();
 			textbox = text;
 			mainWindow = main;
+			this.TopMost = true;
 		}
 
 		/// <summary>
@@ -139,6 +140,14 @@ namespace notepad {
 			SetButtons();
 			SetTextBoxSelection(found[current].Postition, found[current].Length);
 			mainWindow.BringToFront();
+		}
+
+		private void Search_MouseLeave(object sender, EventArgs e) {
+			this.Opacity = 0.5;
+		}
+
+		private void Search_MouseEnter(object sender, EventArgs e) {
+			this.Opacity = 1;
 		}
 	}
 }
