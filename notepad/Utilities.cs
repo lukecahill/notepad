@@ -52,24 +52,5 @@ namespace notepad {
         public static string ReturnTime() {
             return DateTime.UtcNow.ToString();
         }
-
-        /// <summary>
-        /// Searches the textbox for the specified text
-        /// </summary>
-        /// <param name="textArea">Textbox item which contains the text which is being searched for</param>
-        /// <param name="search">String text which is being searched for</param>
-        /// <returns>Int array containing the position at [0], and the length at [1] if the text is found. If it is not found returns null, which is later checked.</returns>
-        public static int[] ReturnSearch(TextBox textArea, string search) {
-            int[] array = new int[2];
-            var postion = textArea.Text.IndexOf(search);
-            var length = search.Length;
-
-            if(postion != -1) {
-                array[0] = postion;
-                array[1] = length;
-                return array;
-            }
-            return null;
-        }
     }
 }
