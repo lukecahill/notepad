@@ -128,7 +128,7 @@ namespace notepad {
 		/// <summary>
 		/// Cycles through the matches of the Regex, adds the results to a list, then sets the default buttons, and selection of the textbox.
 		/// </summary>
-		/// <param name="match"></param>
+		/// <param name="match">MatchCollection containing the items which matched the Regex search</param>
 		private void FoundResults(MatchCollection match) {
 			var index = 0;
 			foreach (Match item in match) {
