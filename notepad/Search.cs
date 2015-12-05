@@ -142,10 +142,16 @@ namespace notepad {
 			mainWindow.BringToFront();
 		}
 
+		/// <summary>
+		/// Change opactity to half when the mouse leaves the form
+		/// </summary>
 		private void Search_MouseLeave(object sender, EventArgs e) {
 			this.Opacity = 0.5;
 		}
 
+		/// <summary>
+		/// Change opactity to full when the mouse enters the form
+		/// </summary>
 		private void Search_MouseEnter(object sender, EventArgs e) {
 			this.Opacity = 1;
 		}
