@@ -130,11 +130,9 @@ namespace notepad {
 		/// </summary>
 		/// <param name="match">MatchCollection containing the items which matched the Regex search</param>
 		private void FoundResults(MatchCollection match) {
-			var index = 0;
 			foreach (Match item in match) {
 				var result = CreateResult(item.Index, item.Value.Length);
 				found.Add(result);
-				index++;
 			}
 
 			SetButtons();
