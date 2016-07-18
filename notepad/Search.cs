@@ -98,6 +98,8 @@ namespace notepad {
 			} else if(current == 0 && (found.Count > 1)) {
 				previous.Enabled = false;
 				next.Enabled = true;
+			} else if(current > 0) {
+				previous.Enabled = true;
 			}
 		}
 
@@ -138,20 +140,6 @@ namespace notepad {
 			SetButtons();
 			SetTextBoxSelection(found[current].Postition, found[current].Length);
 			mainWindow.BringToFront();
-		}
-
-		/// <summary>
-		/// Change opactity to half when the mouse leaves the form
-		/// </summary>
-		private void Search_MouseLeave(object sender, EventArgs e) {
-			this.Opacity = 0.5;
-		}
-
-		/// <summary>
-		/// Change opactity to full when the mouse enters the form
-		/// </summary>
-		private void Search_MouseEnter(object sender, EventArgs e) {
-			this.Opacity = 1;
 		}
 	}
 }
