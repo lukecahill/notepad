@@ -14,6 +14,7 @@ namespace notepad {
         /// <returns>Bool of success/failure</returns>
         public bool SaveCurrentFile(string filename, string textToWrite) {
             using(var stream = new StreamWriter(filename)) {
+				stream.NewLine = "\n";
                 stream.WriteLine(textToWrite);
                 stream.Flush();
             };
