@@ -141,5 +141,30 @@ namespace notepad {
 			SetTextBoxSelection(found[current].Postition, found[current].Length);
 			mainWindow.BringToFront();
 		}
+
+		private void replaceCheck_CheckedChanged(object sender, EventArgs e) {
+			if(replaceCheck.Checked) {
+				replaceAllBtn.Show();
+				replaceOneBtn.Show();
+				replaceText.Show();
+			} else {
+				replaceAllBtn.Hide();
+				replaceOneBtn.Hide();
+				replaceText.Hide();
+			}
+		}
+
+		private void replaceOneBtn_Click(object sender, EventArgs e) {
+			searchButton.PerformClick();
+			textbox.SelectedText = replaceText.Text;
+		}
+
+		private void replaceAllBtn_Click(object sender, EventArgs e) {
+			searchButton.PerformClick();
+			for(var i = 0; i < found.Count; i++) {
+				SetTextBoxSelection(found[i].Postition, found[i].Length);
+				textbox.SelectedText = replaceText.Text;
+			}
+		}
 	}
 }

@@ -28,12 +28,16 @@
 			this.searchButton = new System.Windows.Forms.Button();
 			this.textToFind = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
+			this.replaceCheck = new System.Windows.Forms.CheckBox();
+			this.replaceText = new System.Windows.Forms.TextBox();
+			this.replaceOneBtn = new System.Windows.Forms.Button();
+			this.replaceAllBtn = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// previous
 			// 
 			this.previous.Enabled = false;
-			this.previous.Location = new System.Drawing.Point(52, 69);
+			this.previous.Location = new System.Drawing.Point(11, 53);
 			this.previous.Name = "previous";
 			this.previous.Size = new System.Drawing.Size(75, 23);
 			this.previous.TabIndex = 3;
@@ -44,7 +48,7 @@
 			// next
 			// 
 			this.next.Enabled = false;
-			this.next.Location = new System.Drawing.Point(147, 69);
+			this.next.Location = new System.Drawing.Point(106, 53);
 			this.next.Name = "next";
 			this.next.Size = new System.Drawing.Size(75, 23);
 			this.next.TabIndex = 4;
@@ -79,11 +83,56 @@
 			this.label1.TabIndex = 5;
 			this.label1.Text = "Enter the text to find:";
 			// 
+			// replaceCheck
+			// 
+			this.replaceCheck.AutoSize = true;
+			this.replaceCheck.Location = new System.Drawing.Point(192, 59);
+			this.replaceCheck.Name = "replaceCheck";
+			this.replaceCheck.Size = new System.Drawing.Size(66, 17);
+			this.replaceCheck.TabIndex = 6;
+			this.replaceCheck.Text = "Replace";
+			this.replaceCheck.UseVisualStyleBackColor = false;
+			this.replaceCheck.CheckedChanged += new System.EventHandler(this.replaceCheck_CheckedChanged);
+			// 
+			// replaceText
+			// 
+			this.replaceText.Location = new System.Drawing.Point(12, 91);
+			this.replaceText.Name = "replaceText";
+			this.replaceText.Size = new System.Drawing.Size(179, 20);
+			this.replaceText.TabIndex = 7;
+			this.replaceText.Visible = false;
+			// 
+			// replaceOneBtn
+			// 
+			this.replaceOneBtn.Location = new System.Drawing.Point(12, 117);
+			this.replaceOneBtn.Name = "replaceOneBtn";
+			this.replaceOneBtn.Size = new System.Drawing.Size(105, 23);
+			this.replaceOneBtn.TabIndex = 8;
+			this.replaceOneBtn.Text = "Replace This One";
+			this.replaceOneBtn.UseVisualStyleBackColor = true;
+			this.replaceOneBtn.Visible = false;
+			this.replaceOneBtn.Click += new System.EventHandler(this.replaceOneBtn_Click);
+			// 
+			// replaceAllBtn
+			// 
+			this.replaceAllBtn.Location = new System.Drawing.Point(123, 117);
+			this.replaceAllBtn.Name = "replaceAllBtn";
+			this.replaceAllBtn.Size = new System.Drawing.Size(106, 23);
+			this.replaceAllBtn.TabIndex = 9;
+			this.replaceAllBtn.Text = "Replace All";
+			this.replaceAllBtn.UseVisualStyleBackColor = true;
+			this.replaceAllBtn.Visible = false;
+			this.replaceAllBtn.Click += new System.EventHandler(this.replaceAllBtn_Click);
+			// 
 			// Search
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 103);
+			this.ClientSize = new System.Drawing.Size(284, 144);
+			this.Controls.Add(this.replaceAllBtn);
+			this.Controls.Add(this.replaceOneBtn);
+			this.Controls.Add(this.replaceText);
+			this.Controls.Add(this.replaceCheck);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textToFind);
 			this.Controls.Add(this.searchButton);
@@ -107,5 +156,9 @@
 		private System.Windows.Forms.Button searchButton;
 		private System.Windows.Forms.TextBox textToFind;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.CheckBox replaceCheck;
+		private System.Windows.Forms.TextBox replaceText;
+		private System.Windows.Forms.Button replaceOneBtn;
+		private System.Windows.Forms.Button replaceAllBtn;
 	}
 }
