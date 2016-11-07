@@ -162,7 +162,12 @@ namespace notepad {
 		private void replaceAllBtn_Click(object sender, EventArgs e) {
 			searchButton.PerformClick();
 			for(var i = 0; i < found.Count; i++) {
-				SetTextBoxSelection(found[i].Postition, found[i].Length);
+				if(i > 0) {
+					SetTextBoxSelection(found[i].Postition - 1, found[i].Length);
+				} else {
+					SetTextBoxSelection(found[i].Postition, found[i].Length);
+				}
+				//SetTextBoxSelection(found[i].Postition, found[i].Length);
 				textbox.SelectedText = replaceText.Text;
 			}
 		}
