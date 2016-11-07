@@ -54,6 +54,7 @@ namespace notepad {
             base.OnFormClosing(e);
 
             if(e.CloseReason == CloseReason.UserClosing) {
+				if(textArea.Text.Equals("")) { return; }
                 var isSaved = help.CheckExit(saved);
                 var close = ExitApplication(isSaved);
 
