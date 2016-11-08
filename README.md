@@ -12,7 +12,7 @@ Currently has support for:
 
 > Print preview
 
-> Search
+> Search - this supports Regex or normal searches. 
 
 > Replace
 
