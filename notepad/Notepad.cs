@@ -367,6 +367,11 @@ namespace notepad {
         }
 		#endregion
 
+		/// <summary>
+		/// Open the search form, but show the replace functionality straight away
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void searchReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
 			var search = new Search(textArea, this, true);
 			search.Show();
