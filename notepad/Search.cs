@@ -16,11 +16,19 @@ namespace notepad {
 		/// </summary>
 		/// <param name="text">TextBox of the text editor writing area</param>
 		/// <param name="main">MainWindow of the text editor writing area</param>
-		public Search(TextBox text, MainWindow main) {
+		/// <param name="replace">Boolean of if the user wants to use the replace functionality</param>
+		public Search(TextBox text, MainWindow main, bool replace = false) {
 			InitializeComponent();
 			textbox = text;
 			mainWindow = main;
 			this.TopMost = true;
+
+			if (replace) {
+				replaceAllBtn.Show();
+				replaceOneBtn.Show();
+				replaceText.Show();
+				replaceCheck.Checked = true;
+			}
 		}
 
 		/// <summary>

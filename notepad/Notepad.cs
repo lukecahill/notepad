@@ -365,6 +365,11 @@ namespace notepad {
 
             return result;
         }
-        #endregion
-    } // end class
+		#endregion
+
+		private void searchReplaceToolStripMenuItem_Click(object sender, EventArgs e) {
+			var search = new Search(textArea, this, true);
+			search.Show();
+		}
+	} // end class
 } // end namespace
