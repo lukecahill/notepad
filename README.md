@@ -1,7 +1,5 @@
-# Notepad+++
-Notepad application created with C#.
-
-Now named Notepad+++, to show that it is better than both Notepad and Notepad++.
+# Text Editor
+Notepad application created with C#, with a very creative name.
 
 Currently has support for:
 > Saving
