@@ -63,6 +63,7 @@ namespace notepad {
 		private void searchButton_Click(object sender, EventArgs e) {
 			var match = new Regex(textToFind.Text);
 			var results = match.Matches(textbox.Text);
+			// textbox.Text.IndexOf // for non-regex based searching. allowing the user to search for regex
 			
 			if(textToFind.Equals(' ') || String.IsNullOrWhiteSpace(textToFind.Text)) {
 				MessageBox.Show("Please enter some text to find.");
@@ -142,6 +143,11 @@ namespace notepad {
 			mainWindow.BringToFront();
 		}
 
+		/// <summary>
+		/// Show or hide the replace options when checked/unchecked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void replaceCheck_CheckedChanged(object sender, EventArgs e) {
 			if(replaceCheck.Checked) {
 				replaceAllBtn.Show();
@@ -154,18 +160,28 @@ namespace notepad {
 			}
 		}
 
+		/// <summary>
+		/// Replaces the first instance of the word that is found
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void replaceOneBtn_Click(object sender, EventArgs e) {
 			searchButton.PerformClick();
 			textbox.SelectedText = replaceText.Text;
 		}
 
+		/// <summary>
+		/// Performs a search and then iterates over the results replacing the found word with the text specified in the replace box. 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void replaceAllBtn_Click(object sender, EventArgs e) {
 			searchButton.PerformClick();
 			var diff = 0;
 			var over = false;
 			var length = found[0].Length;
 			
-			if(found[0].Length > replaceText.TextLength) {
+			if(length > replaceText.TextLength) {
 				diff = length - replaceText.TextLength;
 				over = false;
 			} else if(length < replaceText.TextLength) {
@@ -175,9 +191,9 @@ namespace notepad {
 
 			for(var i = 0; i < found.Count; i++) {
 				if(over) {
-					SetTextBoxSelection(found[i].Postition + (diff * i), found[i].Length);
+					SetTextBoxSelection(found[i].Postition + (diff * i), length);
 				} else {
-					SetTextBoxSelection(found[i].Postition - (diff * i), found[i].Length);
+					SetTextBoxSelection(found[i].Postition - (diff * i), length);
 				}
 				textbox.SelectedText = replaceText.Text;
 			}
