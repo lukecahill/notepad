@@ -66,23 +66,43 @@ namespace notepad {
             }
         }
 
+		/// <summary>
+		/// Show an about message when clicked
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
             MessageBox.Show("Written by Luke Cahill");
         }
 
         #region Copy, Paste & Cut
+		/// <summary>
+		/// Paste any text that is found in the users clipboard.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void pasteToolStripMenuItem1_Click(object sender, EventArgs e) {
             if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text)) {
                 textArea.Paste();
             }
         }
 
+		/// <summary>
+		/// Copy any highlighted text
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void copyToolStripMenuItem1_Click(object sender, EventArgs e) {
             if (textArea.SelectionLength > 0) {
                 textArea.Copy();
             }
         }
 
+		/// <summary>
+		/// Cut any highlighted text
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void cutToolStripMenuItem1_Click(object sender, EventArgs e) {
             if (textArea.SelectionLength > 0) {
                 textArea.Cut();
@@ -91,20 +111,40 @@ namespace notepad {
 
         #endregion
 
+		/// <summary>
+		/// Shows the search form, allowing the user to user the search and replace functionality
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void searchToolStripMenuItem_Click(object sender, EventArgs e) {
 			var search = new Search(textArea, this);
 			
 			search.Show();
         }
 
+		/// <summary>
+		/// Select all of the text in the text area
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) {
             textArea.SelectAll();
         }
 
+		/// <summary>
+		/// Start a new instance of the notepad
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void newToolStripMenuItem_Click(object sender, EventArgs e) {
             help.StartNew();
         }
 
+		/// <summary>
+		/// Exit the current instance. Checks that the current document is saved if any changes have been made.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
 			if(!saved) {
 				var closing = new FormClosingEventArgs(CloseReason.UserClosing, false);
@@ -114,6 +154,11 @@ namespace notepad {
 			}
         }
 
+		/// <summary>
+		/// Prints the current documents
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void printToolStripMenuItem_Click(object sender, EventArgs e) {
             if (!String.IsNullOrEmpty(filename)) {
                 help.PrintDocument();
@@ -122,6 +167,11 @@ namespace notepad {
             }
         }
 
+		/// <summary>
+		/// Shows the print preview page to the user. Can then choose to print from this screen
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void printPreviewToolStripMenuItem_Click(object sender, EventArgs e) {
             if (!String.IsNullOrEmpty(filename)) {
                 help.PrintPreview();
@@ -130,6 +180,11 @@ namespace notepad {
             }
         }
 
+		/// <summary>
+		/// Turn word wrap on and off. Changes the text and colors to show what is selected. 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e) {
             if (textArea.WordWrap) {
                 textArea.WordWrap = false;
@@ -142,6 +197,11 @@ namespace notepad {
             }
         }
 
+		/// <summary>
+		/// Shows a dialog page where the user can edit the current font.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void customizeToolStripMenuItem_Click(object sender, EventArgs e) {
             var dlg = Utilities.SetUpFontDialog();
 
@@ -151,10 +211,21 @@ namespace notepad {
             }
         }
 
+		/// <summary>
+		/// Undo any changes in the textarea
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void undoToolStripMenuItem_Click(object sender, EventArgs e) {
             textArea.Undo();
         }
 
+		/// <summary>
+		/// Update the word and line count as the user is typing. 
+		/// Changes the saved boolean to false as changes have been made.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void textArea_TextChanged(object sender, EventArgs e) {
             saved = false;
             toolStripStatusLabel1.Text = $"Lines: {Utilities.LineCount(textArea)}";
@@ -164,15 +235,30 @@ namespace notepad {
             statusStrip1.Refresh();
         }
 
+		/// <summary>
+		/// Prints the current date and time when clicked.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void timeDateToolStripMenuItem_Click(object sender, EventArgs e) {
             textArea.AppendText(Utilities.ReturnTime());
 
         }
 
+		/// <summary>
+		/// Keeps this instance of Notepad+++ on top of all other windows. 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e) {
             this.TopMost = alwaysOnTopToolStripMenuItem.Checked;
         }
 
+		/// <summary>
+		/// Show or hide the status strip.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             if (statusStrip1.Visible == false) {
                 statusStrip1.Visible = true;
@@ -193,6 +279,12 @@ namespace notepad {
 
         #region Saving and Loading
 
+		/// <summary>
+		/// Save the current document when clicked. If it is a new file with no file name then a prompt is shown asking the user to enter a filename. 
+		/// Sets the window title to the title of the saved document.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
             if (string.IsNullOrEmpty(filename)) {
                 if (ShowSaveDialog() != DialogResult.OK) {
@@ -205,7 +297,14 @@ namespace notepad {
             saved = true;
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
+		/// <summary>
+		/// Save the current document when clicked. If it is a new file with no file name then a prompt is shown asking the user to enter a filename. 
+		/// Sets the window title to the title of the saved document.
+		/// If this was shown after the user clicked the exit button then it will exit the program, after saving.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
             if (ShowSaveDialog() != DialogResult.OK) {
                 return;
             }
@@ -219,6 +318,12 @@ namespace notepad {
             }
         }
 
+		/// <summary>
+		/// Shows the dialog allowing the user to choose a file to open.
+		/// When a file is chosen then that file is opened and it's content written to the text area.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void openToolStripMenuItem_Click(object sender, EventArgs e) {
             var size = -1;
             var open = new OpenFileDialog();
@@ -239,6 +344,11 @@ namespace notepad {
             }
         }
 
+		/// <summary>
+		/// The save dialog that is shown.
+		/// Filter so that the only documents which are shows are text files. 
+		/// </summary>
+		/// <returns></returns>
         DialogResult ShowSaveDialog() {
             var dialog = new SaveFileDialog();
             dialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
